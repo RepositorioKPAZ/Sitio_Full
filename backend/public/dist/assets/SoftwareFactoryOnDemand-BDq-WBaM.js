@@ -1,0 +1,1 @@
+import{j as a}from"./index-9rlOlUzo.js";import{g as t,B as r}from"./collaborationHelpers-nNAKESUp.js";import"./FloatingButtons-BrNeo1LH.js";import"./ServiceFAQs-D89Kk_xX.js";const i=()=>{const o=t("software-factory-ondemand");return o?a.jsx(r,{data:o}):a.jsx("div",{children:"Model data not found"})};export{i as default};

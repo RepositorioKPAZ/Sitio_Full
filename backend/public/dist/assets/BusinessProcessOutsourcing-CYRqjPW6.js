@@ -1,0 +1,1 @@
+import{j as s}from"./index-9rlOlUzo.js";import{g as t,B as r}from"./collaborationHelpers-nNAKESUp.js";import"./FloatingButtons-BrNeo1LH.js";import"./ServiceFAQs-D89Kk_xX.js";const u=()=>{const o=t("business-process-outsourcing");return o?s.jsx(r,{data:o}):s.jsx("div",{children:"Model data not found"})};export{u as default};

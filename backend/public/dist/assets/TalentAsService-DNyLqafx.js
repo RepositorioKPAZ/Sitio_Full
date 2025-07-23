@@ -1,0 +1,1 @@
+import{j as a}from"./index-9rlOlUzo.js";import{g as o,B as e}from"./collaborationHelpers-nNAKESUp.js";import"./FloatingButtons-BrNeo1LH.js";import"./ServiceFAQs-D89Kk_xX.js";const l=()=>{const t=o("talent-as-service");return t?a.jsx(e,{data:t}):a.jsx("div",{children:"Model data not found"})};export{l as default};

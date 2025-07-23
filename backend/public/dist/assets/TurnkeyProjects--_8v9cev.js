@@ -1,0 +1,1 @@
+import{j as t}from"./index-9rlOlUzo.js";import{B as r,g as a}from"./collaborationHelpers-nNAKESUp.js";import"./FloatingButtons-BrNeo1LH.js";import"./ServiceFAQs-D89Kk_xX.js";const d=()=>{const o=a("turnkey-projects");return o?t.jsx(r,{data:o}):t.jsx("div",{children:"Model data not found"})};export{d as default};

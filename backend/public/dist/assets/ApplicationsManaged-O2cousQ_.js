@@ -1,0 +1,1 @@
+import{j as o}from"./index-9rlOlUzo.js";import{g as t,B as r}from"./collaborationHelpers-nNAKESUp.js";import"./FloatingButtons-BrNeo1LH.js";import"./ServiceFAQs-D89Kk_xX.js";const d=()=>{const a=t("applications-managed");return a?o.jsx(r,{data:a}):o.jsx("div",{children:"Model data not found"})};export{d as default};
