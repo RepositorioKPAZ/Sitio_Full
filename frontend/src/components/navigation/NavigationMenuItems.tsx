@@ -12,31 +12,31 @@ interface NavigationMenuItemsProps {
 
 export const NavigationMenuItems = ({ handleInicioClick }: NavigationMenuItemsProps) => {
   return (
-    <NavigationMenuList className="gap-1">
+    <NavigationMenuList className="gap-1 md:flex-row flex-col md:items-center items-start">
       <NavigationMenuItem>
-        <NavigationItem onClick={handleInicioClick} className="px-4 py-3 group relative overflow-hidden">
+        <NavigationItem onClick={handleInicioClick} className="px-4 py-3 group relative overflow-hidden w-full md:w-auto">
           <span className="relative z-10 font-medium tracking-wide">Inicio</span>
           <div className="absolute inset-0 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 opacity-0 group-hover:opacity-100 transition-all duration-500 rounded-xl scale-95 group-hover:scale-100"></div>
           <div className="absolute bottom-1 left-1/2 w-0 h-0.5 bg-gradient-to-r from-[#2e4bce] to-[#1e3a9e] group-hover:w-8 group-hover:left-1/2 group-hover:-translate-x-1/2 transition-all duration-500 rounded-full"></div>
         </NavigationItem>
       </NavigationMenuItem>
       
-      <NavigationMenuItem>
+      <NavigationMenuItem className="w-full md:w-auto">
         <ServicesDropdown />
       </NavigationMenuItem>
 
-      <NavigationMenuItem>
+      <NavigationMenuItem className="w-full md:w-auto">
         <CollaborationModelsDropdown />
       </NavigationMenuItem>
 
-      <NavigationMenuItem>
+      <NavigationMenuItem className="w-full md:w-auto">
         <AlliancesMenuItem />
       </NavigationMenuItem>
 
-      <NavigationMenuItem>
+      <NavigationMenuItem className="w-full md:w-auto">
         <Link 
           to="/insights"
-          className="relative px-4 py-3 text-sm font-medium tracking-wide text-gray-700 hover:text-[#2e4bce] rounded-xl transition-all duration-500 group overflow-hidden inline-block"
+          className="relative px-4 py-3 text-sm font-medium tracking-wide text-gray-700 hover:text-[#2e4bce] rounded-xl transition-all duration-500 group overflow-hidden inline-block w-full md:w-auto"
         >
           <span className="relative z-10">IT Insights</span>
           <div className="absolute inset-0 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 opacity-0 group-hover:opacity-100 transition-all duration-500 rounded-xl scale-95 group-hover:scale-100"></div>
@@ -45,10 +45,10 @@ export const NavigationMenuItems = ({ handleInicioClick }: NavigationMenuItemsPr
         </Link>
       </NavigationMenuItem>
 
-      <NavigationMenuItem>
+      <NavigationMenuItem className="w-full md:w-auto">
         <Link 
           to="/careers"
-          className="relative px-4 py-3 text-sm font-medium tracking-wide text-gray-700 hover:text-[#2e4bce] rounded-xl transition-all duration-500 group overflow-hidden inline-block"
+          className="relative px-4 py-3 text-sm font-medium tracking-wide text-gray-700 hover:text-[#2e4bce] rounded-xl transition-all duration-500 group overflow-hidden inline-block w-full md:w-auto"
         >
           <span className="relative z-10">Únete a KPaz</span>
           <div className="absolute inset-0 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 opacity-0 group-hover:opacity-100 transition-all duration-500 rounded-xl scale-95 group-hover:scale-100"></div>
