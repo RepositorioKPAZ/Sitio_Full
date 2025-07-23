@@ -72,7 +72,7 @@ export const useSavingsCalculations = (teamMembers: TeamMember[], projectDuratio
         totalInternalCost: 0,
         totalSavings: 0,
         totalOutsourcingCost: 0,
-        savingsPercentage: 27.8
+        savingsPercentage: 0
       };
     }
 
@@ -93,10 +93,11 @@ export const useSavingsCalculations = (teamMembers: TeamMember[], projectDuratio
       
       // Calcular costo mensual por miembro
       const costoMensual = tarifaFinal * member.quantity;
-      //console.log(`📅 Costo mensual: $${tarifaFinal} x ${member.quantity} = $${costoMensual}`);
+      console.log(`📅 Costo mensual: $${tarifaFinal} x ${member.quantity} = $${costoMensual}`);
       
       // Calcular costo total para la duración del proyecto (multiplicar por meses)
       const duracionMeses = projectDuration[0];
+      
       const costoTotal = costoMensual * duracionMeses;
       //console.log(`⏱️ Duración: ${duracionMeses} meses → Costo total: $${costoTotal}`);
       
@@ -118,16 +119,15 @@ export const useSavingsCalculations = (teamMembers: TeamMember[], projectDuratio
       const costoMensual = costoMesFinal * member.quantity;
       const duracionMeses = projectDuration[0] + hiringDelay; // Sumar meses de demora en contratación
       const costoTotal = costoMensual * duracionMeses;
-      
-      //console.log(`🏢 Costo interno desde DB: ${member.role} (${member.seniority}) x${member.quantity}: $${costoMesFinal}/mes → $${costoTotal} total (${projectDuration[0]} + ${hiringDelay} meses)`);
-      
-      return total + costoTotal;
+      const extra = ((250 + 1915) * member.quantity) + (0.8*costoMensual);
+      return total + costoTotal + extra;
     }, 0);
 
     //console.log(`📊 Total costo interno desde DB: $${totalInternalCost}`);
 
-    const savingsPercentage = 27.8;
+    
     const totalSavings = totalInternalCost - totalOutsourcingCost;
+    const savingsPercentage = 100*(totalSavings/totalInternalCost);
 
     //console.log(`📊 Cálculo final: Interno $${totalInternalCost} → KPaz $${totalOutsourcingCost} (Ahorro $${totalSavings})`);
 

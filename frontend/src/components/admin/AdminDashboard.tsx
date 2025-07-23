@@ -11,7 +11,8 @@ interface INoticia {
   esDestacada: boolean;
 }
 
-const API_URL = 'http://kpazserv0020-ajancrcahpbpg9a6.eastus-01.azurewebsites.net/api/noticias';
+const API_URL = 'https://kpazserv0020-ajancrcahpbpg9a6.eastus-01.azurewebsites.net/api/noticias';
+//const API_URL = 'http://localhost:3001/api/noticias';
 
 const AdminDashboard: React.FC = () => {
   const [noticias, setNoticias] = useState<INoticia[]>([]);
@@ -25,7 +26,8 @@ const AdminDashboard: React.FC = () => {
   const fetchNoticias = async () => {
     try {
       const response = await axios.get(API_URL);
-      setNoticias(response.data);
+      console.log("Noticias recibidas en frontend:", response.data);
+      setNoticias(Array.isArray(response.data.data) ? response.data.data : []);
     } catch (error) {
       console.error('Error al cargar noticias:', error);
       alert('No se pudieron cargar las noticias.');
@@ -90,7 +92,7 @@ const AdminDashboard: React.FC = () => {
                 </tr>
               ) : (
                 noticiasFiltradas.map((noticia) => (
-                  <tr key={noticia._id} className="border-b last:border-none hover:bg-blue-50/40 transition">
+                  <tr key={noticia.id || noticia._id} className="border-b last:border-none hover:bg-blue-50/40 transition">
                     <td className="px-6 py-4 font-medium text-gray-900 max-w-xs truncate">{noticia.titulo}</td>
                     <td className="px-6 py-4 text-gray-700 max-w-xs truncate">{noticia.resumen}</td>
                     <td className="px-6 py-4 text-gray-700">{noticia.categoria}</td>

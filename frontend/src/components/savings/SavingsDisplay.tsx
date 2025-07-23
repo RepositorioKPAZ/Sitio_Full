@@ -31,7 +31,7 @@ export const SavingsDisplay = React.memo(({
               {formatCurrency(totalSavings)}
             </div>
             <div className="text-lg text-green-500 font-semibold mt-2">
-              {savingsPercentage}% de ahorro
+              {savingsPercentage.toFixed(1)}% de ahorro
             </div>
           </div>
           
