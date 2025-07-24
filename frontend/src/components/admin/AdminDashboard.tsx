@@ -11,8 +11,8 @@ interface INoticia {
   esDestacada: boolean;
 }
 
-const API_URL = 'https://kpazserv0020-ajancrcahpbpg9a6.eastus-01.azurewebsites.net/api/noticias';
-//const API_URL = 'http://localhost:3001/api/noticias';
+//const API_URL = 'https://kpazserv0020-ajancrcahpbpg9a6.eastus-01.azurewebsites.net/api/noticias';
+const API_URL = 'http://localhost:3001/api/noticias';
 
 const AdminDashboard: React.FC = () => {
   const [noticias, setNoticias] = useState<INoticia[]>([]);

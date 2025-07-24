@@ -3,6 +3,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Calendar, BookOpen, TrendingUp } from "lucide-react";
 import { getInsightsByPartner } from "@/data/insightsData";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 interface InsightCardProps {
   title: string;
@@ -11,12 +13,24 @@ interface InsightCardProps {
   readTime: string;
   category: string;
   featured?: boolean;
+  image?: string;
 }
 
-const InsightCard = ({ title, excerpt, date, readTime, category, featured = false }: InsightCardProps) => {
+interface Noticia {
+  id: number;
+  titulo: string;
+  resumen: string;
+  contenido: string;
+  urlImagen: string;
+  categoria: string;
+  esDestacada: boolean;
+  created_at: string;
+}
+
+const InsightCard = ({ title, excerpt, date, readTime, category, featured = false, image }: InsightCardProps) => {
   if (featured) {
     return (
-      <div className="col-span-full bg-gradient-to-r from-[#2e4bce] to-[#1e3a9e] rounded-3xl p-8 text-white">
+      <div className="col-span-full bg-gradient-to-r from-blue-600 to-blue-700 rounded-3xl p-8 text-white">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div>
             <Badge className="mb-4 bg-white/20 text-white border-white/30">
@@ -40,8 +54,20 @@ const InsightCard = ({ title, excerpt, date, readTime, category, featured = fals
             </Button>
           </div>
           <div className="hidden md:block">
-            <div className="w-full h-48 bg-white/10 rounded-2xl flex items-center justify-center">
-              <span className="text-4xl">⚡</span>
+            {image ? (
+              <img 
+                src={image} 
+                alt={title}
+                className="w-full h-48 object-cover rounded-2xl"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                  target.nextElementSibling?.classList.remove('hidden');
+                }}
+              />
+            ) : null}
+            <div className={`w-full h-48 bg-white/10 rounded-2xl flex items-center justify-center ${image ? 'hidden' : ''}`}>
+              <span className="text-4xl">🔄</span>
             </div>
           </div>
         </div>
@@ -78,47 +104,103 @@ const InsightCard = ({ title, excerpt, date, readTime, category, featured = fals
 };
 
 export const OutSystemsInsights = () => {
-  const outsystemsInsights = [
-    {
-      title: "OutSystems 12: Revolución en Desarrollo Low-Code Empresarial",
-      excerpt: "Descubre las nuevas capacidades de OutSystems 12 que están transformando la velocidad de desarrollo de aplicaciones empresariales, con IA integrada y mejores herramientas de colaboración.",
-      date: "15 Dic 2024",
-      readTime: "6 min",
-      category: "Plataforma",
-      featured: true
-    },
-    {
-      title: "Caso de Éxito: Banco Digital en 3 Meses con OutSystems",
-      excerpt: "Conoce cómo una institución financiera desarrolló su plataforma de banca digital completa usando OutSystems, reduciendo tiempos de desarrollo en 80%.",
-      date: "10 Dic 2024",
-      readTime: "4 min",
-      category: "Caso de Éxito"
-    },
-    {
-      title: "Mejores Prácticas: Arquitectura Escalable con OutSystems",
-      excerpt: "Guía completa para diseñar arquitecturas robustas y escalables en OutSystems, desde microservicios hasta integración con sistemas legacy.",
-      date: "5 Dic 2024",
-      readTime: "8 min",
-      category: "Arquitectura"
-    },
-    {
-      title: "OutSystems AI Mentor: Desarrollo Asistido por Inteligencia Artificial",
-      excerpt: "Explora cómo AI Mentor está revolucionando el desarrollo low-code con sugerencias inteligentes, detección de patrones y optimización automática de código.",
-      date: "1 Dic 2024",
-      readTime: "5 min",
-      category: "Inteligencia Artificial"
-    }
-  ];
+  const [featuredInsight, setFeaturedInsight] = useState<Noticia | null>(null);
+  const [regularInsights, setRegularInsights] = useState<Noticia[]>([]);
+  const [showAll, setShowAll] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const featuredInsight = outsystemsInsights.find(insight => insight.featured);
-  const regularInsights = outsystemsInsights.filter(insight => !insight.featured);
+  // Obtener insights estáticos como fallback
+  const outsystemsInsights = getInsightsByPartner('outsystems');
+  const staticFeaturedInsight = outsystemsInsights.find(insight => insight.featured);
+  const staticRegularInsights = outsystemsInsights.filter(insight => !insight.featured);
+
+  useEffect(() => {
+    const fetchInsights = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/noticias/categoria/OutSystems`);
+        
+        if (response.data.success && response.data.data) {
+          const insights = response.data.data;
+          const featured = insights.find((insight: Noticia) => insight.esDestacada);
+          const regular = insights.filter((insight: Noticia) => !insight.esDestacada);
+          
+          setFeaturedInsight(featured || null);
+          setRegularInsights(regular);
+        }
+      } catch (error) {
+        console.error('Error fetching OutSystems insights:', error);
+        setFeaturedInsight(null);
+        setRegularInsights([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInsights();
+  }, []);
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('es-ES', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+  };
+
+  const calculateReadTime = (content: string) => {
+    const wordsPerMinute = 200;
+    const words = content.split(' ').length;
+    return Math.ceil(words / wordsPerMinute);
+  };
+
+  // Determinar qué insights mostrar
+  const displayFeaturedInsight = featuredInsight ? {
+    title: featuredInsight.titulo,
+    excerpt: featuredInsight.resumen,
+    date: formatDate(featuredInsight.created_at),
+    readTime: `${calculateReadTime(featuredInsight.contenido)} min`,
+    category: 'Destacado',
+    featured: true,
+    image: featuredInsight.urlImagen
+  } : staticFeaturedInsight;
+
+  const displayRegularInsights = regularInsights.length > 0 
+    ? regularInsights.map(insight => ({
+        title: insight.titulo,
+        excerpt: insight.resumen,
+        date: formatDate(insight.created_at),
+        readTime: `${calculateReadTime(insight.contenido)} min`,
+        category: insight.categoria,
+        image: insight.urlImagen
+      }))
+    : staticRegularInsights;
+
+  const visibleInsights = showAll ? displayRegularInsights : displayRegularInsights.slice(0, 3);
+
+  if (loading) {
+    return (
+      <section className="py-16 bg-gradient-to-br from-blue-50 to-blue-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <Badge variant="secondary" className="mb-6 bg-blue-50 text-blue-600 border-blue-200 font-medium">
+              🔄 OutSystems Insights
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Cargando <span className="text-blue-600">OutSystems</span> insights...
+            </h2>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-16 bg-gradient-to-br from-blue-50 to-blue-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <Badge variant="secondary" className="mb-6 bg-blue-50 text-blue-600 border-blue-200 font-medium">
-            ⚡ OutSystems Insights
+            🔄 OutSystems Insights
           </Badge>
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             Últimas novedades <span className="text-blue-600">OutSystems</span>
@@ -128,17 +210,29 @@ export const OutSystemsInsights = () => {
           </p>
         </div>
 
-        {featuredInsight && (
+        {displayFeaturedInsight && (
           <div className="grid gap-8 mb-8">
-            <InsightCard {...featuredInsight} />
+            <InsightCard {...displayFeaturedInsight} />
           </div>
         )}
 
-        {regularInsights.length > 0 && (
+        {displayRegularInsights.length > 0 && (
           <div className="grid md:grid-cols-3 gap-6 mb-8">
-            {regularInsights.map((insight, index) => (
+            {visibleInsights.map((insight, index) => (
               <InsightCard key={index} {...insight} />
             ))}
+          </div>
+        )}
+
+        {displayRegularInsights.length > 3 && (
+          <div className="text-center mb-8">
+            <Button 
+              variant="outline" 
+              onClick={() => setShowAll(!showAll)}
+              className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
+            >
+              {showAll ? 'Ver menos' : `Ver todos (${displayRegularInsights.length})`}
+            </Button>
           </div>
         )}
 

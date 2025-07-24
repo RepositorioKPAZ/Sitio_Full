@@ -25,7 +25,7 @@ const Careers = () => {
             <CareersHeader />
             <BenefitsGrid />
             <JobOpeningsList />
-            <CareersCTA />
+            <CareersCTA /> 
           </div>
         </section>
       </main>

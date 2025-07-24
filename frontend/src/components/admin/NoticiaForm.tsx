@@ -11,8 +11,8 @@ interface IFormData {
   esDestacada: boolean;
 }
 
-const API_URL = 'https://kpazserv0020-ajancrcahpbpg9a6.eastus-01.azurewebsites.net/api/noticias';
-//const API_URL = 'http://localhost:3001/api/noticias';
+//const API_URL = 'https://kpazserv0020-ajancrcahpbpg9a6.eastus-01.azurewebsites.net/api/noticias';
+const API_URL = 'http://localhost:3001/api/noticias';
 
 const NoticiaForm: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // Hook para obtener el ID de la URL
