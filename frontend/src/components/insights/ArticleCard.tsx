@@ -1,9 +1,20 @@
-
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Calendar, BookOpen } from "lucide-react";
 import { OptimizedImage } from "@/components/ui/optimized-image";
+import { useNavigate } from "react-router-dom";
+
+interface ArticleData {
+  id?: number;
+  titulo: string;
+  resumen: string;
+  contenido: string;
+  urlImagen: string;
+  categoria: string;
+  esDestacada?: boolean;
+  created_at?: string;
+}
 
 interface ArticleCardProps {
   title: string;
@@ -12,14 +23,40 @@ interface ArticleCardProps {
   date: string;
   readTime: string;
   image: string;
+  articleData?: ArticleData; // Full article data for navigation
 }
 
-export const ArticleCard = ({ title, excerpt, category, date, readTime, image }: ArticleCardProps) => {
+export const ArticleCard = ({
+  title,
+  excerpt,
+  category,
+  date,
+  readTime,
+  image,
+  articleData,
+}: ArticleCardProps) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    console.log("ArticleCard clicked - News data:", articleData);
+
+    if (articleData) {
+      navigate("/article", {
+        state: {
+          articleData,
+        },
+      });
+    }
+  };
+
   return (
-    <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 group border border-gray-200 hover:border-[#2e4bce]/30">
+    <Card
+      className="overflow-hidden hover:shadow-xl transition-all duration-300 group border border-gray-200 hover:border-[#2e4bce]/30 cursor-pointer"
+      onClick={handleClick}
+    >
       <div className="relative overflow-hidden">
-        <OptimizedImage 
-          src={image} 
+        <OptimizedImage
+          src={image}
           alt={title}
           className="w-full h-48 group-hover:scale-105 transition-transform duration-500"
           objectFit="cover"
@@ -49,7 +86,11 @@ export const ArticleCard = ({ title, excerpt, category, date, readTime, image }:
             {readTime}
           </span>
         </div>
-        <Button variant="outline" size="sm" className="w-full border-[#2e4bce] text-[#2e4bce] hover:bg-[#2e4bce] hover:text-white">
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full border-[#2e4bce] text-[#2e4bce] hover:bg-[#2e4bce] hover:text-white"
+        >
           Leer Más <ArrowRight className="ml-2 h-3 w-3" />
         </Button>
       </CardContent>

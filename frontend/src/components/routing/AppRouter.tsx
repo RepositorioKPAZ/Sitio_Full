@@ -1,4 +1,3 @@
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Suspense, lazy, memo } from "react";
 import { LoadingFallback } from "@/components/ui/loading-fallback";
@@ -9,11 +8,12 @@ import AdminDashboard from "@/components/admin/AdminDashboard";
 import NoticiaForm from "@/components/admin/NoticiaForm";
 
 // Group lazy imports by category for better organization and potential future code splitting
-const lazyImport = (importFn: () => Promise<any>) => 
+const lazyImport = (importFn: () => Promise<any>) =>
   lazy(() => importFn().catch(() => import("@/pages/NotFound")));
 
 // Core pages
 const Insights = lazyImport(() => import("@/pages/Insights"));
+const Article = lazyImport(() => import("@/pages/Article"));
 const Careers = lazyImport(() => import("@/pages/Careers"));
 const NuestraEsencia = lazyImport(() => import("@/pages/NuestraEsencia"));
 const NotFound = lazyImport(() => import("@/pages/NotFound"));
@@ -21,25 +21,45 @@ const Diagnostic = lazyImport(() => import("@/pages/Diagnostic"));
 
 // Service pages - grouped for potential route-based code splitting
 const servicePages = {
-  SoftwareDevelopment: lazyImport(() => import("@/pages/services/SoftwareDevelopment")),
+  SoftwareDevelopment: lazyImport(
+    () => import("@/pages/services/SoftwareDevelopment")
+  ),
   Hyperautomation: lazyImport(() => import("@/pages/services/Hyperautomation")),
-  LowCodeDevelopment: lazyImport(() => import("@/pages/services/LowCodeDevelopment")),
-  MobileAppsDevelopment: lazyImport(() => import("@/pages/services/MobileAppsDevelopment")),
+  LowCodeDevelopment: lazyImport(
+    () => import("@/pages/services/LowCodeDevelopment")
+  ),
+  MobileAppsDevelopment: lazyImport(
+    () => import("@/pages/services/MobileAppsDevelopment")
+  ),
   AIDataScience: lazyImport(() => import("@/pages/services/AIDataScience")),
-  DigitalProductsDesign: lazyImport(() => import("@/pages/services/DigitalProductsDesign")),
+  DigitalProductsDesign: lazyImport(
+    () => import("@/pages/services/DigitalProductsDesign")
+  ),
   QATesting: lazyImport(() => import("@/pages/services/QATesting")),
-  InfraestructuraOps: lazyImport(() => import("@/pages/services/InfraestructuraOps")),
-  SoftwareLicensingService: lazyImport(() => import("@/pages/services/SoftwareLicensingService"))
+  InfraestructuraOps: lazyImport(
+    () => import("@/pages/services/InfraestructuraOps")
+  ),
+  SoftwareLicensingService: lazyImport(
+    () => import("@/pages/services/SoftwareLicensingService")
+  ),
 };
 
 // Collaboration pages
 const collaborationPages = {
   TurnkeyProjects: lazyImport(() => import("@/pages/services/TurnkeyProjects")),
-  ApplicationsManaged: lazyImport(() => import("@/pages/services/ApplicationsManaged")),
+  ApplicationsManaged: lazyImport(
+    () => import("@/pages/services/ApplicationsManaged")
+  ),
   TalentAsService: lazyImport(() => import("@/pages/services/TalentAsService")),
-  BusinessProcessOutsourcing: lazyImport(() => import("@/pages/services/BusinessProcessOutsourcing")),
-  SoftwareFactoryOnDemand: lazyImport(() => import("@/pages/services/SoftwareFactoryOnDemand")),
-  SoftwareLicensingService: lazyImport(() => import("@/pages/services/SoftwareLicensingService"))
+  BusinessProcessOutsourcing: lazyImport(
+    () => import("@/pages/services/BusinessProcessOutsourcing")
+  ),
+  SoftwareFactoryOnDemand: lazyImport(
+    () => import("@/pages/services/SoftwareFactoryOnDemand")
+  ),
+  SoftwareLicensingService: lazyImport(
+    () => import("@/pages/services/SoftwareLicensingService")
+  ),
 };
 
 // Alliance pages
@@ -52,7 +72,7 @@ const alliancePages = {
   KoreAI: lazyImport(() => import("@/pages/alliances/KoreAI")),
   OutSystems: lazyImport(() => import("@/pages/alliances/OutSystems")),
   Genexus: lazyImport(() => import("@/pages/alliances/Genexus")),
-  Salesforce: lazyImport(() => import("@/pages/alliances/Salesforce"))
+  Salesforce: lazyImport(() => import("@/pages/alliances/Salesforce")),
 };
 
 // Memoized route component for better performance
@@ -68,46 +88,138 @@ export const AppRouter = memo(() => {
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/insights" element={<LazyRoute Component={Insights} />} />
+        <Route path="/article" element={<LazyRoute Component={Article} />} />
         <Route path="/careers" element={<LazyRoute Component={Careers} />} />
-        <Route path="/nuestra-esencia" element={<LazyRoute Component={NuestraEsencia} />} />
-        <Route path="/diagnostic" element={<LazyRoute Component={Diagnostic} />} />
-        
+        <Route
+          path="/nuestra-esencia"
+          element={<LazyRoute Component={NuestraEsencia} />}
+        />
+        <Route
+          path="/diagnostic"
+          element={<LazyRoute Component={Diagnostic} />}
+        />
+
         {/* Service routes */}
-        <Route path="/servicios/software-development" element={<LazyRoute Component={servicePages.SoftwareDevelopment} />} />
-        <Route path="/servicios/hyperautomation" element={<LazyRoute Component={servicePages.Hyperautomation} />} />
-        <Route path="/servicios/low-code-development" element={<LazyRoute Component={servicePages.LowCodeDevelopment} />} />
-        <Route path="/servicios/mobile-apps-development" element={<LazyRoute Component={servicePages.MobileAppsDevelopment} />} />
-        <Route path="/servicios/ai-y-data-science" element={<LazyRoute Component={servicePages.AIDataScience} />} />
-        <Route path="/servicios/digital-products-design" element={<LazyRoute Component={servicePages.DigitalProductsDesign} />} />
-        <Route path="/servicios/qa-y-testing" element={<LazyRoute Component={servicePages.QATesting} />} />
-        <Route path="/servicios/infraestructura-y-ops" element={<LazyRoute Component={servicePages.InfraestructuraOps} />} />
-        <Route path="/servicios/software-licensing-service" element={<LazyRoute Component={servicePages.SoftwareLicensingService} />} />
-        
+        <Route
+          path="/servicios/software-development"
+          element={<LazyRoute Component={servicePages.SoftwareDevelopment} />}
+        />
+        <Route
+          path="/servicios/hyperautomation"
+          element={<LazyRoute Component={servicePages.Hyperautomation} />}
+        />
+        <Route
+          path="/servicios/low-code-development"
+          element={<LazyRoute Component={servicePages.LowCodeDevelopment} />}
+        />
+        <Route
+          path="/servicios/mobile-apps-development"
+          element={<LazyRoute Component={servicePages.MobileAppsDevelopment} />}
+        />
+        <Route
+          path="/servicios/ai-y-data-science"
+          element={<LazyRoute Component={servicePages.AIDataScience} />}
+        />
+        <Route
+          path="/servicios/digital-products-design"
+          element={<LazyRoute Component={servicePages.DigitalProductsDesign} />}
+        />
+        <Route
+          path="/servicios/qa-y-testing"
+          element={<LazyRoute Component={servicePages.QATesting} />}
+        />
+        <Route
+          path="/servicios/infraestructura-y-ops"
+          element={<LazyRoute Component={servicePages.InfraestructuraOps} />}
+        />
+        <Route
+          path="/servicios/software-licensing-service"
+          element={
+            <LazyRoute Component={servicePages.SoftwareLicensingService} />
+          }
+        />
+
         {/* Collaboration routes */}
-        <Route path="/modelos/turnkey-projects" element={<LazyRoute Component={collaborationPages.TurnkeyProjects} />} />
-        <Route path="/modelos/applications-managed" element={<LazyRoute Component={collaborationPages.ApplicationsManaged} />} />
-        <Route path="/modelos/talent-as-service" element={<LazyRoute Component={collaborationPages.TalentAsService} />} />
-        <Route path="/modelos/business-process-outsourcing" element={<LazyRoute Component={collaborationPages.BusinessProcessOutsourcing} />} />
-        <Route path="/modelos/software-factory-ondemand" element={<LazyRoute Component={collaborationPages.SoftwareFactoryOnDemand} />} />
-        <Route path="/modelos/software-licensing-service" element={<LazyRoute Component={collaborationPages.SoftwareLicensingService} />} />
-        
+        <Route
+          path="/modelos/turnkey-projects"
+          element={<LazyRoute Component={collaborationPages.TurnkeyProjects} />}
+        />
+        <Route
+          path="/modelos/applications-managed"
+          element={
+            <LazyRoute Component={collaborationPages.ApplicationsManaged} />
+          }
+        />
+        <Route
+          path="/modelos/talent-as-service"
+          element={<LazyRoute Component={collaborationPages.TalentAsService} />}
+        />
+        <Route
+          path="/modelos/business-process-outsourcing"
+          element={
+            <LazyRoute
+              Component={collaborationPages.BusinessProcessOutsourcing}
+            />
+          }
+        />
+        <Route
+          path="/modelos/software-factory-ondemand"
+          element={
+            <LazyRoute Component={collaborationPages.SoftwareFactoryOnDemand} />
+          }
+        />
+        <Route
+          path="/modelos/software-licensing-service"
+          element={
+            <LazyRoute
+              Component={collaborationPages.SoftwareLicensingService}
+            />
+          }
+        />
+
         {/* Alliance routes */}
-        <Route path="/alianzas/microsoft" element={<LazyRoute Component={alliancePages.Microsoft} />} />
-        <Route path="/alianzas/google" element={<LazyRoute Component={alliancePages.Google} />} />
-        <Route path="/alianzas/amazon" element={<LazyRoute Component={alliancePages.Amazon} />} />
-        <Route path="/alianzas/uipath" element={<LazyRoute Component={alliancePages.UiPath} />} />
-        <Route path="/alianzas/rocketbot" element={<LazyRoute Component={alliancePages.Rocketbot} />} />
-        <Route path="/alianzas/kore-ai" element={<LazyRoute Component={alliancePages.KoreAI} />} />
-        <Route path="/alianzas/outsystems" element={<LazyRoute Component={alliancePages.OutSystems} />} />
-        <Route path="/alianzas/genexus" element={<LazyRoute Component={alliancePages.Genexus} />} />
-        <Route path="/alianzas/salesforce" element={<LazyRoute Component={alliancePages.Salesforce} />} />
-        
+        <Route
+          path="/alianzas/microsoft"
+          element={<LazyRoute Component={alliancePages.Microsoft} />}
+        />
+        <Route
+          path="/alianzas/google"
+          element={<LazyRoute Component={alliancePages.Google} />}
+        />
+        <Route
+          path="/alianzas/amazon"
+          element={<LazyRoute Component={alliancePages.Amazon} />}
+        />
+        <Route
+          path="/alianzas/uipath"
+          element={<LazyRoute Component={alliancePages.UiPath} />}
+        />
+        <Route
+          path="/alianzas/rocketbot"
+          element={<LazyRoute Component={alliancePages.Rocketbot} />}
+        />
+        <Route
+          path="/alianzas/kore-ai"
+          element={<LazyRoute Component={alliancePages.KoreAI} />}
+        />
+        <Route
+          path="/alianzas/outsystems"
+          element={<LazyRoute Component={alliancePages.OutSystems} />}
+        />
+        <Route
+          path="/alianzas/genexus"
+          element={<LazyRoute Component={alliancePages.Genexus} />}
+        />
+        <Route
+          path="/alianzas/salesforce"
+          element={<LazyRoute Component={alliancePages.Salesforce} />}
+        />
+
         {/* Catch-all route for 404 */}
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/crear" element={<NoticiaForm />} />
         <Route path="/admin/editar/:id" element={<NoticiaForm />} />
         <Route path="*" element={<LazyRoute Component={NotFound} />} />
-        
       </Routes>
     </BrowserRouter>
   );

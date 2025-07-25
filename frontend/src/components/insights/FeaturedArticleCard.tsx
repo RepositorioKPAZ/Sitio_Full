@@ -1,9 +1,20 @@
-
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Calendar, BookOpen, TrendingUp } from "lucide-react";
 import { OptimizedImage } from "@/components/ui/optimized-image";
+import { useNavigate } from "react-router-dom";
+
+interface ArticleData {
+  id?: number;
+  titulo: string;
+  resumen: string;
+  contenido: string;
+  urlImagen: string;
+  categoria: string;
+  esDestacada?: boolean;
+  created_at?: string;
+}
 
 interface FeaturedArticleCardProps {
   title: string;
@@ -11,15 +22,40 @@ interface FeaturedArticleCardProps {
   date: string;
   readTime: string;
   image: string;
+  articleData?: ArticleData; // Full article data for navigation
 }
 
-export const FeaturedArticleCard = ({ title, excerpt, date, readTime, image }: FeaturedArticleCardProps) => {
+export const FeaturedArticleCard = ({
+  title,
+  excerpt,
+  date,
+  readTime,
+  image,
+  articleData,
+}: FeaturedArticleCardProps) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    console.log("FeaturedArticleCard clicked - News data:", articleData);
+
+    if (articleData) {
+      navigate("/article", {
+        state: {
+          articleData,
+        },
+      });
+    }
+  };
+
   return (
-    <Card className="mb-12 overflow-hidden border-2 border-[#2e4bce]/20 shadow-xl hover:shadow-2xl transition-all duration-300 group">
+    <Card
+      className="mb-12 overflow-hidden border-2 border-[#2e4bce]/20 shadow-xl hover:shadow-2xl transition-all duration-300 group cursor-pointer"
+      onClick={handleClick}
+    >
       <div className="grid md:grid-cols-2 gap-0">
         <div className="relative overflow-hidden">
-          <OptimizedImage 
-            src={image} 
+          <OptimizedImage
+            src={image}
             alt={title}
             className="w-full h-64 md:h-full group-hover:scale-105 transition-transform duration-500"
             objectFit="cover"
@@ -39,9 +75,7 @@ export const FeaturedArticleCard = ({ title, excerpt, date, readTime, image }: F
           <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-[#2e4bce] transition-colors">
             {title}
           </h3>
-          <p className="text-gray-600 mb-6 leading-relaxed">
-            {excerpt}
-          </p>
+          <p className="text-gray-600 mb-6 leading-relaxed">{excerpt}</p>
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4 text-sm text-gray-500">
               <span className="flex items-center gap-1">

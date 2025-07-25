@@ -1,11 +1,11 @@
 
+/* Import custom styles - @import must come first */
+@import './styles/animations.css';
+@import './styles/effects.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* Import custom styles */
-@import './styles/animations.css';
-@import './styles/effects.css';
 
 /* Design system variables - Core color and spacing definitions */
 @layer base {
